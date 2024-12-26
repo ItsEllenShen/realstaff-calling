@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f7f7f7;
+  }
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+h2 {
+    margin: 100px;
+    font-size: 40px;
+    padding: 15px 25px;
+}
+span {
+    font-size: 50px;
+    color: #e41f1f;
+}
+.set {
+    text-align: center;
+}
+button {
+    margin: 8px;
+    padding: 15px 25px;
+    font-size: 30px;
+}
+.number {
+    font-size: 50px;
+}
+input {
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 10px;
+    width: 50%;
+    margin-bottom: 20px;
+}
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+}
+button {
+    font-size: 1.5rem;
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px #999;
+  }
+button:hover {
+background-color: #45a049;
+}
+
+button:active {
+background-color: #45a049;
+box-shadow: 0 2px #666;
+transform: translateY(2px);
+}
+
+button.delete {
+background-color: #f44336;
+}
+
+button.delete:hover {
+background-color: #e41f1f;
+}
+
+button.enter {
+background-color: #008CBA;
+}
+
+button.enter:hover {
+background-color: #007bb5;
+}
+
+@media (max-width: 768px) {
+button {
+    font-size: 1.2rem;
+    padding: 15px;
+}
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.display {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+.blink {
+animation: blinkAnimation 1s ease-in-out 3; /* 1秒動畫，重複3次 */
+}
+
+@keyframes blinkAnimation {
+0%, 100% {
+    opacity: 1;
+    color: black;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    color: red;
+    transform: scale(1.2); /* 縮放效果 */
+  }
+}
