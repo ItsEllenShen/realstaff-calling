@@ -20,7 +20,8 @@ ws.addEventListener('close', () => {
 });
 
 numberButtons.forEach(button => {
-    button.addEventListener("click", () => {
+    button.addEventListener("touchstart", event => {
+      event.preventDefault();
       const value = button.dataset.value; // 取得按鈕的數字
       currentNumber += value; // 將數字加到 currentNumber
       input.value = currentNumber; // 更新輸入框顯示
@@ -29,11 +30,12 @@ numberButtons.forEach(button => {
 
 deleteButton.addEventListener("touchstart", event => {
     event.preventDefault();
-currentNumber = currentNumber.slice(0, -1); // 刪除最後一個字元
-input.value = currentNumber; // 更新輸入框顯示
-});
+    currentNumber = currentNumber.slice(0, -1); // 刪除最後一個字元
+    input.value = currentNumber; // 更新輸入框顯示
+    });
 
-enterButton.addEventListener("click", () => {
+enterButton.addEventListener("touchstart", event => {
+  event.preventDefault();
   const number = input.value;
     if (currentNumber) { // 確保欄位不是空的
         console.log(`Sending update to server: ${number}`);
