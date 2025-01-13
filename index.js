@@ -45,7 +45,9 @@ enterButton.addEventListener("click", () => {
         console.log(`Sending update to server: ${number}`);
         ws.send(JSON.stringify({ type: 'update', number}));
         sound.play();
+        setTimeout(() => {
         playVoice(number);
+        }, 1000);
         currentNumber = ""; // 清空數字
         input.value = ""; // 清空輸入框
     } else {
