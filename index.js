@@ -34,6 +34,13 @@ deleteButton.addEventListener("touchstart", event => {
     input.value = currentNumber; // 更新輸入框顯示
     });
 
+const playVoice = (number) => {
+  const message = `${number}號，可取餐`;
+  const utterance = new SpeechSynthesisUtterance(message);
+  utterance.lang = "zh-TW"; // 設定語言為中文
+  window.speechSynthesis.speak(utterance);
+};
+
 enterButton.addEventListener("touchstart", event => {
   event.preventDefault();
   const number = input.value;
@@ -41,6 +48,7 @@ enterButton.addEventListener("touchstart", event => {
         console.log(`Sending update to server: ${number}`);
         ws.send(JSON.stringify({ type: 'update', number}));
         sound.play();
+        playVoice(number);
         currentNumber = ""; // 清空數字
         input.value = ""; // 清空輸入框
     } else {
