@@ -14,18 +14,10 @@ if (!('speechSynthesis' in window)) {
   alert("您的瀏覽器不支援語音提示功能。請使用最新的瀏覽器！");
 }
 
-// 啟用語音功能
-enableVoiceButton.addEventListener("touchstart", event => {
-  event.preventDefault();
-  const utterance = new SpeechSynthesisUtterance("語音功能已啟用");
-  utterance.lang = "zh-TW";
-  window.speechSynthesis.speak(utterance);
-
-  isVoiceEnabled = true;
-  enableVoiceButton.disabled = true; // 禁用按鈕，避免重複啟用
-  enableVoiceButton.textContent = "語音提示已啟用";
-  alert("語音提示功能已啟用！");
-});
+let voices = [];
+window.speechSynthesis.onvoiceschanged = function() {
+  voices = window.speechSynthesis.getVoices();
+};
 
 ws.addEventListener('open', () => {
   console.log('WebSocket connection established for staff');
@@ -59,7 +51,7 @@ function playSound() {
     sound.play();
     sound.onended = () => resolve();  // 當音效播放完畢時，解決Promise
   });
-};
+}
 
 enterButton.addEventListener("touchstart", async event => {
   event.preventDefault();
@@ -71,16 +63,30 @@ enterButton.addEventListener("touchstart", async event => {
 
     await playSound();
 
+    // 確保語音已啟用並且語音語言已經加載
     if (isVoiceEnabled) {
-    const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
-    utterance.lang = "zh-TW";
-    window.speechSynthesis.speak(utterance);
-    };
-
+      const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
+      utterance.lang = "zh-TW";  // 設定語言
+      utterance.voice = voices.find(voice => voice.lang === "zh-TW");  // 选择合适的语音
+      window.speechSynthesis.speak(utterance);
+    }
 
     currentNumber = ""; // 清空數字
     input.value = ""; // 清空輸入框
   } else {
     alert("請輸入取餐編號！");
   }
+});
+
+// 啟用語音功能
+enableVoiceButton.addEventListener("touchstart", event => {
+  event.preventDefault();
+  const utterance = new SpeechSynthesisUtterance("語音功能已啟用");
+  utterance.lang = "zh-TW";
+  window.speechSynthesis.speak(utterance);
+
+  isVoiceEnabled = true;
+  enableVoiceButton.disabled = true; // 禁用按鈕，避免重複啟用
+  enableVoiceButton.textContent = "語音提示已啟用";
+  alert("語音提示功能已啟用！");
 });
