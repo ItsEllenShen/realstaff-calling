@@ -17,6 +17,7 @@ if (!('speechSynthesis' in window)) {
 let voices = [];
 window.speechSynthesis.onvoiceschanged = function() {
   voices = window.speechSynthesis.getVoices();
+  console.log("Available voices:", voices);  // 打印可用語音
 };
 
 ws.addEventListener('open', () => {
@@ -63,11 +64,21 @@ enterButton.addEventListener("touchstart", async event => {
 
     await playSound();
 
-    // 確保語音已啟用並且語音語言已經加載
+    // 確保語音已啟用
     if (isVoiceEnabled) {
       const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
       utterance.lang = "zh-TW";  // 設定語言
-      utterance.voice = voices.find(voice => voice.lang === "zh-TW");  // 选择合适的语音
+
+      // 確保有 "zh-TW" 語音可用
+      const voice = voices.find(v => v.lang === "zh-TW");
+      if (voice) {
+        utterance.voice = voice;  // 設定語音
+        console.log("Using voice:", voice);  // 顯示使用的語音
+      } else {
+        console.log("No zh-TW voice found");
+      }
+
+      // 播放語音
       window.speechSynthesis.speak(utterance);
     }
 
