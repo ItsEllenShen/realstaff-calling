@@ -6,6 +6,25 @@ const sound = document.getElementById("dingSound");
 const ws = new WebSocket('wss://staff-calling.onrender.com');
 
 let currentNumber = "";
+let isVoiceEnabled = false;
+
+// 檢查是否支援語音
+if (!('speechSynthesis' in window)) {
+  alert("您的瀏覽器不支援語音提示功能。請使用最新的瀏覽器！");
+}
+
+// 啟用語音功能
+enableVoiceButton.addEventListener("touchstart", event => {
+  event.preventDefault();
+  const utterance = new SpeechSynthesisUtterance("語音功能已啟用");
+  utterance.lang = "zh-TW";
+  window.speechSynthesis.speak(utterance);
+
+  isVoiceEnabled = true;
+  enableVoiceButton.disabled = true; // 禁用按鈕，避免重複啟用
+  enableVoiceButton.textContent = "語音提示已啟用";
+  alert("語音提示功能已啟用！");
+});
 
 ws.addEventListener('open', () => {
   console.log('WebSocket connection established for staff');
@@ -20,34 +39,35 @@ ws.addEventListener('close', () => {
 });
 
 numberButtons.forEach(button => {
-    button.addEventListener("click", () => {
+    button.addEventListener("touchstart", event => {
+      event.preventDefault();
       const value = button.dataset.value; // 取得按鈕的數字
       currentNumber += value; // 將數字加到 currentNumber
       input.value = currentNumber; // 更新輸入框顯示
     });
   });
 
-deleteButton.addEventListener("click", () => {
+deleteButton.addEventListener("touchstart", event => {
+      event.preventDefault();
     currentNumber = currentNumber.slice(0, -1); // 刪除最後一個字元
     input.value = currentNumber; // 更新輸入框顯示
     });
 
-const playVoice = (number) => {
-  const message = `${number}號，可取餐`;
-  const utterance = new SpeechSynthesisUtterance(message);
-  utterance.lang = "zh-TW"; // 設定語言為中文
-  window.speechSynthesis.speak(utterance);
-};
-
-enterButton.addEventListener("click", () => {
+enterButton.addEventListener("touchstart", event => {
+  event.preventDefault();
   const number = input.value;
     if (currentNumber) { // 確保欄位不是空的
         console.log(`Sending update to server: ${number}`);
         ws.send(JSON.stringify({ type: 'update', number}));
         sound.play();
+        if (isVoiceEnabled) {
+      // 播放語音提示
         setTimeout(() => {
-        playVoice(number);
-        }, 1000);
+        const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
+        utterance.lang = "zh-TW";
+        window.speechSynthesis.speak(utterance);
+      }, 1000); // 延遲 1 秒播放語音
+    }
         currentNumber = ""; // 清空數字
         input.value = ""; // 清空輸入框
     } else {
