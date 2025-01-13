@@ -2,8 +2,8 @@ const input = document.getElementById("numberInput");
 const numberButtons = document.querySelectorAll(".number");
 const enterButton = document.querySelector(".enter");
 const deleteButton = document.querySelector(".delete");
-const sound = document.getElementById("dingSound");
 const enableVoiceButton = document.getElementById("enableVoice");
+const sound = document.getElementById("dingSound");
 const ws = new WebSocket('wss://staff-calling.onrender.com');
 
 let currentNumber = "";
@@ -16,7 +16,7 @@ if (!('speechSynthesis' in window)) {
 
 // 啟用語音功能
 enableVoiceButton.addEventListener("touchstart", event => {
-  event.preventDefault();
+  event.preventDefault());
   const utterance = new SpeechSynthesisUtterance("語音功能已啟用");
   utterance.lang = "zh-TW";
   window.speechSynthesis.speak(utterance);
@@ -40,38 +40,41 @@ ws.addEventListener('close', () => {
 });
 
 numberButtons.forEach(button => {
-    button.addEventListener("touchstart", event => {
-      event.preventDefault();
-      const value = button.dataset.value; // 取得按鈕的數字
-      currentNumber += value; // 將數字加到 currentNumber
-      input.value = currentNumber; // 更新輸入框顯示
-    });
+  button.addEventListener("touchstart", event => {
+    event.preventDefault();
+    const value = button.dataset.value; // 取得按鈕的數字
+    currentNumber += value; // 將數字加到 currentNumber
+    input.value = currentNumber; // 更新輸入框顯示
   });
+});
 
 deleteButton.addEventListener("touchstart", event => {
-      event.preventDefault();
-    currentNumber = currentNumber.slice(0, -1); // 刪除最後一個字元
-    input.value = currentNumber; // 更新輸入框顯示
-    });
+  event.preventDefault();
+  currentNumber = currentNumber.slice(0, -1); // 刪除最後一個字元
+  input.value = currentNumber; // 更新輸入框顯示
+});
 
 enterButton.addEventListener("touchstart", event => {
   event.preventDefault();
   const number = input.value;
-    if (currentNumber) { // 確保欄位不是空的
-        console.log(`Sending update to server: ${number}`);
-        ws.send(JSON.stringify({ type: 'update', number}));
-        sound.play();
-        if (isVoiceEnabled) {
+
+  if (currentNumber) { // 確保欄位不是空的
+    console.log(`Sending update to server: ${number}`);
+    ws.send(JSON.stringify({ type: 'update', number }));
+    sound.play(); // 播放提示音
+
+    if (isVoiceEnabled) {
       // 播放語音提示
-        setTimeout(() => {
+      setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
         utterance.lang = "zh-TW";
         window.speechSynthesis.speak(utterance);
       }, 1000); // 延遲 1 秒播放語音
     }
-        currentNumber = ""; // 清空數字
-        input.value = ""; // 清空輸入框
-    } else {
-      alert("請輸入取餐編號！");
-    }
-  });
+
+    currentNumber = ""; // 清空數字
+    input.value = ""; // 清空輸入框
+  } else {
+    alert("請輸入取餐編號！");
+  }
+});
