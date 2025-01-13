@@ -64,13 +64,11 @@ enterButton.addEventListener("touchstart", event => {
     sound.play(); // 播放提示音
 
     if (isVoiceEnabled) {
-      // 播放語音提示
-      setTimeout(() => {
-        const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
-        utterance.lang = "zh-TW";
-        window.speechSynthesis.speak(utterance);
-      }, 1000); // 延遲 1 秒播放語音
-    }
+    const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
+    utterance.lang = "zh-TW";
+    window.speechSynthesis.speak(utterance);
+    };
+
 
     currentNumber = ""; // 清空數字
     input.value = ""; // 清空輸入框
