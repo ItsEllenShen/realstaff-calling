@@ -54,14 +54,22 @@ deleteButton.addEventListener("touchstart", event => {
   input.value = currentNumber; // 更新輸入框顯示
 });
 
-enterButton.addEventListener("touchstart", event => {
+function playSound() {
+  return new Promise(resolve => {
+    sound.play();
+    sound.onended = () => resolve();  // 當音效播放完畢時，解決Promise
+  });
+};
+
+enterButton.addEventListener("touchstart", async event => {
   event.preventDefault();
   const number = input.value;
 
   if (currentNumber) { // 確保欄位不是空的
     console.log(`Sending update to server: ${number}`);
     ws.send(JSON.stringify({ type: 'update', number }));
-    sound.play(); // 播放提示音
+
+    await playSound();
 
     if (isVoiceEnabled) {
     const utterance = new SpeechSynthesisUtterance(`${number}號，可取餐`);
