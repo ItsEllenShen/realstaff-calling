@@ -16,7 +16,7 @@ if (!('speechSynthesis' in window)) {
 
 // 啟用語音功能
 enableVoiceButton.addEventListener("touchstart", event => {
-  event.preventDefault());
+  event.preventDefault();
   const utterance = new SpeechSynthesisUtterance("語音功能已啟用");
   utterance.lang = "zh-TW";
   window.speechSynthesis.speak(utterance);
