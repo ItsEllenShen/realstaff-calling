@@ -3,6 +3,7 @@ const numberButtons = document.querySelectorAll(".number");
 const enterButton = document.querySelector(".enter");
 const deleteButton = document.querySelector(".delete");
 const sound = document.getElementById("dingSound");
+const enableVoiceButton = document.getElementById("enableVoice");
 const ws = new WebSocket('wss://staff-calling.onrender.com');
 
 let currentNumber = "";
